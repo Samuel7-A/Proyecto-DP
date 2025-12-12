@@ -1,3 +1,5 @@
+package com.example.demo.modelo;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -55,3 +57,4 @@ public class Cliente {
         this.email = email;
     }
 }
+
