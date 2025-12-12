@@ -6,49 +6,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.modelo.Empleado;
 import com.example.demo.servicio.ServicioEmpleado;
+import com.example.demo.repositorio.EmpleadoRepo;
 
 @RestController
-@RequestMapping("/api/empleados")
+@RequestMapping("/empleado")
 public class ApiEmpleado {
 
     @Autowired
-    private ServicioEmpleado servicioEmpleado;
+    EmpleadoRepo repo;
 
-    @PostMapping
-    public ResponseEntity<Empleado> registrarEmp(@RequestBody Empleado empleado) {
-        Empleado nuevo = servicioEmpleado.crear(empleado);
-        return ResponseEntity.ok(nuevo);
+    @PostMapping("/crear")
+    public Empleado crear(@RequestBody Empleado e) {
+        return repo.save(e);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Empleado> buscarEmp(@PathVariable Long id) {
-        Empleado empleado = servicioEmpleado.obtenerPorId(id);
-        if (empleado != null) {
-            return ResponseEntity.ok(empleado);
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Empleado>> listarEmpleados() {
-        List<Empleado> empleados = servicioEmpleado.listar();
-        return ResponseEntity.ok(empleados);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Empleado> actualizar(@PathVariable Long id, @RequestBody Empleado empleado) {
-        Empleado actualizado = servicioEmpleado.actualizar(id, empleado);
-        if (actualizado != null) {
-            return ResponseEntity.ok(actualizado);
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarEmp(@PathVariable Long id) {
-        if (servicioEmpleado.eliminar(id)) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    @GetMapping("/listar")
+    public List<Empleado> listar() {
+        return repo.findAll();
     }
 }
