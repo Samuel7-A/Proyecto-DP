@@ -3,6 +3,7 @@ package com.example.demo.modelo;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class LineaFactura {
@@ -10,8 +11,12 @@ public class LineaFactura {
     @Id @GeneratedValue
     private Long idLinea;
 
-    private Long idConsServ;
-    private Long idAlq;
+    @ManyToOne
+    private ConsumoServ consumoServ;
+
+    @ManyToOne
+    private Alquiler alquiler;
+
     private double importe;
 
     // GETTERS Y SETTERS
@@ -24,20 +29,20 @@ public class LineaFactura {
         this.idLinea = idLinea;
     }
 
-    public Long getIdConsServ() {
-        return idConsServ;
+    public ConsumoServ getConsumoServ() {
+        return consumoServ;
     }
 
-    public void setIdConsServ(Long idConsServ) {
-        this.idConsServ = idConsServ;
+    public void setConsumoServ(ConsumoServ consumoServ) {
+        this.consumoServ = consumoServ;
     }
 
-    public Long getIdAlq() {
-        return idAlq;
+    public Alquiler getAlquiler() {
+        return alquiler;
     }
 
-    public void setIdAlq(Long idAlq) {
-        this.idAlq = idAlq;
+    public void setAlquiler(Alquiler alquiler) {
+        this.alquiler = alquiler;
     }
 
     public double getImporte() {

@@ -13,8 +13,7 @@ public class Empleado {
     private String nombre;
     private String dni;
     private String cargo;
-    private String usuario;
-    private String contraseña;
+
 
     // GETTERS Y SETTERS
 
@@ -50,20 +49,5 @@ public class Empleado {
         this.cargo = cargo;
     }
 
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
-
-    public String getContraseña() {
-        return contraseña;
-    }
-
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
-    }
 }
 
