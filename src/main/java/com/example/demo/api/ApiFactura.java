@@ -49,4 +49,9 @@ public class ApiFactura {
     public Factura obtenerFactura(@PathVariable Long id) {
         return servNueva.generarFact(id);
     }
+
+    @GetMapping
+    public List<Factura> listarFacturas() {
+        return servNueva.listarTodas();
+    }
 }
