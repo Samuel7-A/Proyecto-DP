@@ -1,5 +1,7 @@
 package com.example.demo.modelo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -13,7 +15,9 @@ public class Empleado {
     private String nombre;
     private String dni;
     private String cargo;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String usuario;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String contraseña;
 
     // GETTERS Y SETTERS
