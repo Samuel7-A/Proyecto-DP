@@ -1,6 +1,7 @@
 package com.example.demo.servicio;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,35 +34,40 @@ public class ServicioNuevaFactura {
     }
 
     public Factura nueva(List<LineaFactura> detalles, Cliente cli, Empleado emp) {
-        // Calcular importe de cada línea automáticamente
-        for (LineaFactura linea : detalles) {
-            double importeLinea = 0;
+        List<LineaFactura> lineasFinales = new ArrayList<>();
 
-            // Si tiene alquiler, calcular precio
+        for (LineaFactura linea : detalles) {
+            // Si tiene alquiler, crear línea con descripción
             if (linea.getIdAlq() != null) {
                 Alquiler alq = alquilerRepo.findById(linea.getIdAlq()).orElse(null);
                 if (alq != null) {
-                    importeLinea += alq.getPrecioAlq() * alq.getHoraAlq();
+                    LineaFactura lineaAlq = new LineaFactura();
+                    lineaAlq.setDescripcion("Alquiler: " + alq.getNomAlq());
+                    lineaAlq.setImporte(alq.getPrecioAlq() * alq.getHoraAlq());
+                    lineasFinales.add(lineaAlq);
                 }
             }
 
-            // Si tiene consumo de servicio, calcular precio
-            if (linea.getIdConsServ() != null) {
-                ConsumoServ cons = consumoRepo.findById(linea.getIdConsServ()).orElse(null);
-                if (cons != null) {
-                    importeLinea += cons.getPrecio() * cons.getHoras();
+            // Si tiene consumos, crear una línea por cada consumo
+            if (linea.getIdsConsServ() != null && !linea.getIdsConsServ().isEmpty()) {
+                for (Long idCons : linea.getIdsConsServ()) {
+                    ConsumoServ cons = consumoRepo.findById(idCons).orElse(null);
+                    if (cons != null) {
+                        LineaFactura lineaCons = new LineaFactura();
+                        lineaCons.setDescripcion("Servicio: " + cons.getServicio());
+                        lineaCons.setImporte(cons.getPrecio() * cons.getHoras());
+                        lineasFinales.add(lineaCons);
+                    }
                 }
             }
-
-            linea.setImporte(importeLinea);
         }
 
         Factura f = new Factura();
         f.setFechaFact(LocalDate.now());
         f.setCliente(cli);
         f.setEmpleado(emp);
-        f.setDetalles(detalles);
-        f.setTotal(calcularTotal(detalles));
+        f.setDetalles(lineasFinales);
+        f.setTotal(calcularTotal(lineasFinales));
         return f;
     }
 
